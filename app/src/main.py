@@ -2,6 +2,16 @@ import flet as ft
 import threading
 import time
 from pyobjus import autoclass
+from pyobjus.dylib_manager import load_framework, INCLUDE
+
+load_framework(INCLUDE.Foundation)
+
+# Get NSProcessInfo instance
+NSProcessInfo = autoclass("NSProcessInfo")
+process_info = NSProcessInfo.processInfo()
+
+# Retrieve OS version as a string
+os_version = process_info.operatingSystemVersionString.UTF8String()
 
 
 class AccelerometerVisualizer(ft.UserControl):
@@ -84,7 +94,14 @@ def main(page: ft.Page):
     # Se centra el contenido
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
-    page.add(AccelerometerVisualizer())
+    page.add(
+        ft.SafeArea(
+            expand=True,
+            content=ft.Column(
+                [AccelerometerVisualizer(), ft.Text(f"iOS version: {os_version}")]
+            ),
+        )
+    )
 
 
 ft.app(target=main)
