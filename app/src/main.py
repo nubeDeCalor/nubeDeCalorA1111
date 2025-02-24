@@ -14,21 +14,18 @@ process_info = NSProcessInfo.processInfo()
 os_version = process_info.operatingSystemVersionString.UTF8String()
 
 
-class AccelerometerVisualizer(ft.UserControl):
+class AccelerometerVisualizer(ft.Container):
     def __init__(self):
         super().__init__()
         self.is_running = False
         self.motionManager = None
         self.update_thread = None
-
-    def build(self):
-        # Componentes para mostrar los datos de aceleración
         self.label_x = ft.Text("Aceleración en X: --")
         self.label_y = ft.Text("Aceleración en Y: --")
         self.label_z = ft.Text("Aceleración en Z: --")
         # Botón para iniciar/detener la lectura
         self.start_button = ft.ElevatedButton("Start", on_click=self.toggle_start)
-        return ft.Column(
+        self.content = ft.Column(
             controls=[
                 self.label_x,
                 self.label_y,
