@@ -1,46 +1,22 @@
 import flet as ft
-import threading
-import time
-from pyobjus import autoclass
-from pyobjus.dylib_manager import load_framework, INCLUDE
+from flet_assets import AssetsServer
+from assets.widgets.MainNavigationBar import MainNavigationBar
+from assets.widgets.TabContent import TabContent
 
-load_framework(INCLUDE.Foundation)
+server = AssetsServer("app/src/assets")
 
-NSProcessInfo = autoclass("NSProcessInfo")
-process_info = NSProcessInfo.processInfo()
-os_version = process_info.operatingSystemVersionString.UTF8String()
-processor_count = f"{process_info.activeProcessorCount}/{process_info.processorCount}"
-physical_memory = f"{process_info.physicalMemory}"
-isLowPowerModeEnabled = process_info.isLowPowerModeEnabled
 
-try:
-    print(
-        f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(process_info.systemUptime))}"
-    )
-except Exception as e:
-    print(e)
+def build_page(page: ft.Page):
+    page.title = "SkeletoR Diffusion"
+    page.horizontal_alignment = "center"
+    page.padding = 0
 
 
 def main(page: ft.Page):
-    page.title = "Data Visualization"
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
-    page.add(
-        ft.SafeArea(
-            expand=True,
-            content=ft.Column(
-                [
-                    ft.Text(f"iOS: {os_version}"),
-                    ft.Text(f"CPU: {processor_count}"),
-                    ft.Text(f"Memory: {physical_memory}"),
-                    ft.Text(f"Low Power Mode: {isLowPowerModeEnabled}"),
-                ],
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                expand=True,
-                scroll="auto",
-            ),
-        )
-    )
+    build_page(page)
+    tab_content = TabContent(server=server)
+    page.navigation_bar = MainNavigationBar(tab_content)
+    page.add(ft.SafeArea(ft.Container(content=tab_content, expand=True), expand=True))
 
 
-ft.app(target=main)
+ft.app(target=main, view=ft.AppView.WEB_BROWSER, assets_dir="assets")

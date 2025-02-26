@@ -5,5 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "flet-assets>=0.2.1",
     "flet[all]>=0.27.1",
+    "pillow>=11.1.0",
 ]
