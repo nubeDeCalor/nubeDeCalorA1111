@@ -10,7 +10,7 @@
 
   env = {
     VENV_DIR = ".venv";
-    MAIN_FILE = "src/main.py";
+    MAIN_FILE = "app/src/main.py";
   };
 
   idx = {
